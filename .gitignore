@@ -1,2 +1,6 @@
 /vendor/
-.idea
+/.idea/
+/.phpunit.cache/
+composer.lock
+composer.phar
+/.php-cs-fixer.cache
