@@ -13,24 +13,24 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('build_info');
-        $rootNode = $treeBuilder->getRootNode();
-        assert($rootNode instanceof ArrayNodeDefinition);
 
-        $rootNode
+        /** @var ArrayNodeDefinition $rootNode */
+        $rootNode = $treeBuilder->getRootNode();
+        $children = $rootNode->children();
+
+        $children
+            ->scalarNode('path')
+            ->defaultValue('%kernel.project_dir%/var/build-info.json')
+            ->cannotBeEmpty();
+
+        $twigNode = $children
+            ->arrayNode('twig')
+            ->addDefaultsIfNotSet();
+
+        $twigNode
             ->children()
-                ->scalarNode('path')
-                    ->defaultValue('%kernel.project_dir%/var/build-info.json')
-                    ->cannotBeEmpty()
-                ->end()
-                ->arrayNode('twig')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('enabled')
-                            ->defaultFalse()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end();
+            ->booleanNode('enabled')
+            ->defaultFalse();
 
         return $treeBuilder;
     }
