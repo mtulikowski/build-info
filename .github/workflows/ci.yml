@@ -22,7 +22,7 @@ jobs:
                       composer_flags: ''
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
 
             - uses: shivammathur/setup-php@v2
               with:
@@ -45,7 +45,7 @@ jobs:
               run: php vendor/bin/phpunit --testsuite "Build Info Bundle"
 
             - name: Run PHPStan
-              run: php vendor/bin/phpstan analyse --no-progress
+              run: php vendor/bin/phpstan analyse --no-progress --autoload-file=vendor/autoload.php
 
             - name: Run PHP-CS-Fixer
               run: php vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --allow-risky=yes
