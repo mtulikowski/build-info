@@ -9,6 +9,7 @@ use SmartGroup\BuildInfoBundle\Command\GenerateBuildInfoCommand;
 use SmartGroup\BuildInfoBundle\Service\BuildInfoGenerator;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\CommandLoader\FactoryCommandLoader;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -57,7 +58,9 @@ final class GenerateBuildInfoCommandTest extends TestCase
     {
         $application = new Application();
         $application->setAutoExit(false);
-        $application->add($this->command());
+        $application->setCommandLoader(new FactoryCommandLoader([
+            'build-info:generate' => fn (): GenerateBuildInfoCommand => $this->command(),
+        ]));
         $tester = new ApplicationTester($application);
 
         self::assertSame(Command::SUCCESS, $tester->run([
