@@ -47,7 +47,7 @@ The command writes the configured `path`. It creates the parent directory when n
 
 For each value, the command uses this precedence:
 
-1. The command-line option: `--version`, `--revision`, or `--built-at`.
+1. The command-line option: `--build-version`, `--revision`, or `--built-at`.
 2. The matching environment variable: `BUILD_INFO_VERSION`, `BUILD_INFO_REVISION`, or `BUILD_INFO_BUILT_AT`.
 3. Generator fallback.
 

@@ -63,7 +63,7 @@ CI/CD can provide all values explicitly:
 
 ```bash
 php bin/console build-info:generate \
-    --version=1.2.0 \
+    --build-version=1.2.0 \
     --revision=a1b2c3d \
     --built-at=2026-10-20T12:34:56+00:00
 ```

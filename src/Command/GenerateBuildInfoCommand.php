@@ -28,7 +28,7 @@ final class GenerateBuildInfoCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('version', null, InputOption::VALUE_REQUIRED, 'Build version')
+            ->addOption('build-version', null, InputOption::VALUE_REQUIRED, 'Build version')
             ->addOption('revision', null, InputOption::VALUE_REQUIRED, 'Build revision')
             ->addOption('built-at', null, InputOption::VALUE_REQUIRED, 'Build timestamp in ISO 8601 format');
     }
@@ -39,7 +39,7 @@ final class GenerateBuildInfoCommand extends Command
 
         try {
             $info = $this->generator->generate(
-                $this->optionOrEnvironment($input, 'version', 'BUILD_INFO_VERSION'),
+                $this->optionOrEnvironment($input, 'build-version', 'BUILD_INFO_VERSION'),
                 $this->optionOrEnvironment($input, 'revision', 'BUILD_INFO_REVISION'),
                 $this->optionOrEnvironment($input, 'built-at', 'BUILD_INFO_BUILT_AT'),
             );

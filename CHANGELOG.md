@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-10-21
+
+### Fixed
+
+- Replace the conflicting `--version` command option with `--build-version`.
+
 ## [1.0.1] - 2026-10-21
 
 ### Fixed

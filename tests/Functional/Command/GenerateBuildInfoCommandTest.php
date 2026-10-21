@@ -7,7 +7,9 @@ namespace SmartGroup\BuildInfoBundle\Tests\Functional\Command;
 use PHPUnit\Framework\TestCase;
 use SmartGroup\BuildInfoBundle\Command\GenerateBuildInfoCommand;
 use SmartGroup\BuildInfoBundle\Service\BuildInfoGenerator;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Tester\ApplicationTester;
 use Symfony\Component\Console\Tester\CommandTester;
 
 final class GenerateBuildInfoCommandTest extends TestCase
@@ -39,7 +41,7 @@ final class GenerateBuildInfoCommandTest extends TestCase
         $tester = new CommandTester($this->command());
 
         self::assertSame(Command::SUCCESS, $tester->execute([
-            '--version' => '1.2.0',
+            '--build-version' => '1.2.0',
             '--revision' => 'a1b2c3d',
             '--built-at' => '2026-10-20T12:34:56+00:00',
         ]));
@@ -49,6 +51,21 @@ final class GenerateBuildInfoCommandTest extends TestCase
             'revision' => 'a1b2c3d',
             'built_at' => '2026-10-20T12:34:56+00:00',
         ], $this->readGeneratedMetadata());
+    }
+
+    public function testCanBeRunThroughAConsoleApplication(): void
+    {
+        $application = new Application();
+        $application->setAutoExit(false);
+        $application->add($this->command());
+        $tester = new ApplicationTester($application);
+
+        self::assertSame(Command::SUCCESS, $tester->run([
+            'command' => 'build-info:generate',
+            '--build-version' => '1.2.0',
+            '--revision' => 'a1b2c3d',
+            '--built-at' => '2026-10-20T12:34:56+00:00',
+        ]));
     }
 
     public function testGeneratesMetadataFromCiEnvironmentVariables(): void
@@ -86,7 +103,7 @@ final class GenerateBuildInfoCommandTest extends TestCase
         $tester = new CommandTester($this->command());
 
         self::assertSame(Command::FAILURE, $tester->execute([
-            '--version' => '1.2.0',
+            '--build-version' => '1.2.0',
             '--revision' => 'a1b2c3d',
             '--built-at' => 'invalid',
         ]));
