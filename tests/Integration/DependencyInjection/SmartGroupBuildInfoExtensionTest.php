@@ -9,6 +9,7 @@ use SmartGroup\BuildInfoBundle\Command\GenerateBuildInfoCommand;
 use SmartGroup\BuildInfoBundle\DependencyInjection\SmartGroupBuildInfoExtension;
 use SmartGroup\BuildInfoBundle\Service\BuildInfoGenerator;
 use SmartGroup\BuildInfoBundle\Service\BuildInfoReader;
+use SmartGroup\BuildInfoBundle\SmartGroupBuildInfoBundle;
 use SmartGroup\BuildInfoBundle\Twig\BuildInfoExtension;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,6 +17,14 @@ use Symfony\Component\Process\Process;
 
 final class SmartGroupBuildInfoExtensionTest extends TestCase
 {
+    public function testBundleProvidesBuildInfoContainerExtension(): void
+    {
+        $extension = (new SmartGroupBuildInfoBundle())->getContainerExtension();
+
+        self::assertInstanceOf(SmartGroupBuildInfoExtension::class, $extension);
+        self::assertSame('build_info', $extension->getAlias());
+    }
+
     public function testLoadsConfiguredPathAndCoreServices(): void
     {
         $container = $this->loadContainer([

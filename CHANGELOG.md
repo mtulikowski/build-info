@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-21
+
+### Fixed
+
+- Register the `build_info` container extension explicitly so Symfony can initialize the bundle configuration.
+
+## [1.0.0] - 2026-10-20
+
 ### Added
 
 - Read and validate application build metadata from a configurable JSON file.
