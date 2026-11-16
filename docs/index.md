@@ -55,6 +55,20 @@ Git is only a fallback source. When it is usable, the generator derives the vers
 
 This design supports artifacts without `.git`, hosts without Git, shallow clones, and CI environments that provide their own build data. The bundle does not create Git hooks or modify Git configuration.
 
+## Optional local Git hook
+
+For local development, a host application can regenerate metadata after a successful merge. Create the following executable file in the host application's `.git/hooks/post-merge` directory:
+
+```sh
+#!/bin/sh
+
+php bin/console build-info:generate
+```
+
+Git runs `post-merge` after `git merge` and after a `git pull` that performs a merge. It does not run after `git pull --rebase`; run the command manually in that workflow.
+
+Git does not version files inside `.git/hooks`. To share the hook with a team, store a template such as `.githooks/post-merge` in the host application's repository and have each developer copy it to `.git/hooks/post-merge` and mark it executable. The bundle neither installs nor enables hooks automatically.
+
 ## CI/CD example
 
 Supply immutable values from the build environment instead of relying on a repository checkout:
@@ -85,10 +99,37 @@ The returned value also contains `revision` and `built_at`. The host application
 
 ## Installation modes
 
-Symfony Flex discovers the package as a `symfony-bundle` and registers it automatically. Add the configuration file manually until a Flex recipe is distributed separately.
+### Symfony Flex
 
-For applications without Flex, add this to `config/bundles.php`:
+After the community recipe is available, enable Symfony contrib recipes and install the package:
+
+```bash
+composer config extra.symfony.allow-contrib true
+composer require smartgroup/build-info-bundle
+```
+
+Flex registers the bundle and creates `config/packages/build_info.yaml`:
+
+```yaml
+build_info:
+    # Path to the generated build metadata JSON file.
+    # path: '%kernel.project_dir%/var/build-info.json'
+    twig:
+        enabled: true
+```
+
+Twig integration remains inactive when `symfony/twig-bundle` is not installed.
+
+### Manual installation
+
+For applications without Symfony Flex, or that do not allow contrib recipes, install the package with Composer and add this to `config/bundles.php`:
+
+```bash
+composer require smartgroup/build-info-bundle
+```
 
 ```php
 SmartGroup\BuildInfoBundle\SmartGroupBuildInfoBundle::class => ['all' => true],
 ```
+
+Then create `config/packages/build_info.yaml` with the configuration shown above.

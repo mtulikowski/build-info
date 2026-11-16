@@ -9,29 +9,42 @@ SmartGroup Build Info Bundle provides application build metadata for Symfony app
 
 ## Installation
 
-Install the package with Composer:
+### Symfony Flex
+
+After the community recipe is available, enable Symfony contrib recipes and install the package:
+
+```bash
+composer config extra.symfony.allow-contrib true
+composer require smartgroup/build-info-bundle
+```
+
+Flex registers the bundle and creates `config/packages/build_info.yaml`:
+
+```yaml
+build_info:
+    # Path to the generated build metadata JSON file.
+    # path: '%kernel.project_dir%/var/build-info.json'
+    twig:
+        enabled: true
+```
+
+Twig integration remains inactive when `symfony/twig-bundle` is not installed.
+
+### Manual installation
+
+For applications without Symfony Flex, or that do not allow contrib recipes, install the package with Composer:
 
 ```bash
 composer require smartgroup/build-info-bundle
 ```
 
-In a Symfony Flex application, the `symfony-bundle` package type registers the bundle automatically. Add the configuration file yourself:
-
-```yaml
-# config/packages/build_info.yaml
-build_info:
-    path: '%kernel.project_dir%/var/build-info.json'
-    twig:
-        enabled: false
-```
-
-Without Symfony Flex, register the bundle in `config/bundles.php`:
+Register the bundle in `config/bundles.php`:
 
 ```php
 SmartGroup\BuildInfoBundle\SmartGroupBuildInfoBundle::class => ['all' => true],
 ```
 
-Then add the configuration shown above.
+Then create `config/packages/build_info.yaml` with the configuration shown above.
 
 ## Metadata file
 
